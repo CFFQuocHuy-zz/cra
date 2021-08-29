@@ -67,6 +67,7 @@ function Users() {
 
   useEffect(() => {
     handleFetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -104,6 +105,7 @@ function User() {
 
   useEffect(() => {
     handleFetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
