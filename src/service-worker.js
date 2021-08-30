@@ -25,6 +25,10 @@ self.addEventListener("install", () => {
   console.log("INSTALL");
 });
 
+self.addEventListener("fetch", function (event) {
+  console.log(event, "EVENT")
+});
+
 // declare const self: ServiceWorkerGlobalScope;
 
 // clientsClaim();
