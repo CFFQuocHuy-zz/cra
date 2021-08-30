@@ -1,4 +1,4 @@
-// /// <reference lib="webworker" />
+/// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
 // // This service worker can be customized!
@@ -17,6 +17,9 @@
 export function nothing() {
   return "NOTHING";
 }
+
+// eslint-disable-next-line
+const ignored = self.__WB_MANIFEST;
 
 self.addEventListener("install", () => {
   console.log("INSTALL");
