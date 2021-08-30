@@ -26,30 +26,32 @@ self.addEventListener("install", () => {
 });
 
 self.addEventListener("fetch", function (event) {
-  console.log("Handling fetch event for", event.request.url);
+  console.group("Handling fetch event for", event.request.url);
 
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      if (response) {
-        console.log("Found response in cache:", response);
+  event.respondWith(async function () {
+    try {
+      const cache = await caches.open("mysite-dynamic");
 
-        return response;
-      }
-      console.log("No response found in cache. About to fetch from network...");
+      const cachedResponse = await cache.match(event.request);
+      console.log("Response in cache:", cachedResponse);
 
-      return fetch(event.request)
-        .then(function (response) {
-          console.log("Response from network is:", response);
+      const networkResponsePromise = fetch(event.request);
 
-          return response;
-        })
-        .catch(function (error) {
-          console.error("Fetching failed:", error);
+      event.waitUntil(async function () {
+        const networkResponse = await networkResponsePromise;
+        console.log(networkResponse, ": Network response");
 
-          throw error;
-        });
-    })
-  );
+        await cache.put(event.request, networkResponse.clone());
+      });
+
+      return cachedResponse || networkResponsePromise;
+    } catch (error) {
+      console.log("ERROR");
+      throw error;
+    } finally {
+      console.groupEnd();
+    }
+  });
 });
 
 // declare const self: ServiceWorkerGlobalScope;
